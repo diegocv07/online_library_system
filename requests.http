@@ -1,0 +1,17 @@
+GET http://localhost:3000/books/isbn/978-1974713264
+###
+
+POST http://localhost:3000/books
+Content-Type: application/json
+
+{
+    "title": "Cant Fear Your Own World Vol. 1",
+    "author": "Tite Kubo",
+    "isbn": "978-1974713264",
+    "book_rating": 3,
+    "genre": "Shonen",
+    "tags": [
+        "Manga",
+        "Teen"
+    ]
+}

@@ -8,8 +8,8 @@ diesel::table! {
         isbn -> Varchar,
         book_rating -> Int4,
         genre -> Nullable<Varchar>,
-        tags -> Nullable<Varchar>,
         available -> Bool,
         count -> Int4,
+        tags -> Array<Nullable<Text>>,
     }
 }
