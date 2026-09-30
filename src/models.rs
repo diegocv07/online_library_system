@@ -1,7 +1,6 @@
 use crate::schema::books;
 use serde::{Deserialize, Serialize};
-
-#[derive(Deserialize, Insertable, Clone)]
+#[derive(Deserialize, Insertable, Clone, Debug)]
 #[diesel(table_name = books)]
 #[diesel(check_for_backend(diesel::pg::Pg))]
 pub struct NewBook {
@@ -39,17 +38,3 @@ pub struct Book {
     pub available: bool,
     pub count: i32,
 }
-
-// use crate::schema::books;
-
-// #[derive(Insertable)]
-// #[diesel(table_name = books)]
-// pub struct NewBook<'a> {
-//     pub title: &'a str,
-//     pub author: &'a str,
-//     pub isbn: &'a str,
-//     pub book_rating: &'a str,
-//     pub genre: Option<&'a str>,
-//     pub tags: Option<Vec<&'a str>>,
-//     pub count: i32,
-// }
