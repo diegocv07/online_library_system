@@ -3,6 +3,7 @@ use serde::{Deserialize, Serialize};
 #[derive(Deserialize, Insertable, Clone, Debug)]
 #[diesel(table_name = books)]
 #[diesel(check_for_backend(diesel::pg::Pg))]
+
 pub struct NewBook {
     pub title: String,
     pub author: String,
@@ -10,6 +11,12 @@ pub struct NewBook {
     pub book_rating: i32,
     pub genre: Option<String>,
     pub tags: Vec<Option<String>>,
+}
+
+#[derive(Deserialize)]
+pub struct ProtectedNewBook {
+    pub new_book: NewBook,
+    pub key: String,
 }
 
 #[derive(Deserialize)]
@@ -37,4 +44,15 @@ pub struct Book {
     pub tags: Vec<Option<String>>,
     pub available: bool,
     pub count: i32,
+}
+
+#[derive(Debug, Deserialize)]
+pub struct BookQuery {
+    pub title: Option<String>,
+    pub author: Option<String>,
+    pub isbn: Option<String>,
+    pub rating: Option<i32>,
+    pub genres: Option<String>,
+    pub tags: Option<String>,
+    pub available: Option<bool>,
 }

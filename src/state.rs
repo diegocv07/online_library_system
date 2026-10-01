@@ -4,9 +4,13 @@
 // use diesel::dsl::max;
 // use diesel::prelude::*;
 // use std::option::Option;
+use std::sync::{Arc, Mutex};
 
 #[derive(Clone)]
-pub struct AppState {}
+pub struct AppState {
+    pub administrator: Arc<Mutex<bool>>,
+    pub login_attempts: Arc<Mutex<i32>>,
+}
 
 impl AppState {
     pub fn new() -> Self {
@@ -31,6 +35,9 @@ impl AppState {
         //     count: 0,
         // }];
 
-        AppState {}
+        AppState {
+            administrator: Arc::new(Mutex::new(false)),
+            login_attempts: Arc::new(Mutex::new(0)),
+        }
     }
 }

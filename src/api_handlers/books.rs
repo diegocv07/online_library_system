@@ -1,21 +1,31 @@
-use std::collections::HashMap;
+use std::env;
 
 use axum::{
     Json,
-    extract::{Path, Query, State},
+    extract::{Path, Query},
     http::StatusCode,
 };
+use dotenvy::dotenv;
 
 use crate::{
     db::*,
-    models::{Book, NewBook, UpdateBook},
+    models::{Book, BookQuery, NewBook, ProtectedNewBook, UpdateBook},
     schema::books,
-    state::AppState,
 };
 
 use diesel::prelude::*;
 
-pub async fn add(Json(payload): Json<NewBook>) -> Result<(StatusCode, Json<Book>), StatusCode> {
+pub async fn add(
+    Json(payload): Json<ProtectedNewBook>,
+) -> Result<(StatusCode, Json<Book>), StatusCode> {
+    dotenv().ok();
+    let api_key = env::var("API_KEY").expect("No existing key");
+    if !(payload.key == api_key) {
+        return Err(StatusCode::UNAUTHORIZED);
+    }
+
+    let payload = payload.new_book;
+
     let new_book = NewBook {
         title: payload.title,
         author: payload.author,
@@ -55,99 +65,54 @@ pub async fn find_by_isbn(Path(book_isbn): Path<String>) -> Result<Json<Book>, S
     }
 }
 
-// lists books in the database and filters them if a correct query is given
-pub async fn list(Query(params): Query<HashMap<String, String>>) -> Json<Vec<Book>> {
-    if params.is_empty() {
-        println!("No query was given");
-    }
+pub async fn list(Query(params): Query<BookQuery>) -> Json<Vec<Book>> {
+    // println!("{params:?}");
     let connection = &mut establish_connection();
-
-    // SET FILTERS
-    let filter_title = params.get("title").map_or(None, |title| {
-        Some(
-            title
-                .to_ascii_lowercase()
-                .split('_')
-                .map(|s| s.to_owned())
-                .collect::<Vec<String>>(),
-        )
-    });
-
-    let filter_author = params.get("author").map_or(None, |author| {
-        Some(author.to_ascii_lowercase().replace("_", " "))
-    });
-
-    let filter_rating = params
-        .get("rating")
-        .map_or(None, |rating| Some(rating.parse::<i32>().unwrap_or(0)));
-
-    let filter_genre = params.get("genre").map_or(None, |genre| {
-        Some(
-            genre
-                .to_ascii_lowercase()
-                .split(',')
-                .map(|s| s.to_owned())
-                .collect::<Vec<String>>(),
-        )
-    });
-
-    let filter_tags = params.get("tags").map_or(None, |tags| {
-        Some(
-            tags.to_ascii_lowercase()
-                .split(',')
-                .map(|s| s.to_owned())
-                .collect::<Vec<String>>(),
-        )
-    });
-
-    let filter_available = params
-        .get("available")
-        .map_or(None, |avail| Some(avail.parse::<bool>().unwrap_or(true)));
 
     let mut book_list = books::dsl::books
         .select(Book::as_select())
         .load(connection)
         .expect("Error loading books");
 
-    // APPLY FILTERS
-    if let Some(filter) = filter_title {
-        for i in &filter {
-            println!("title filtered by: {}", i);
-        }
+    if let Some(title) = params.title {
+        let word_filter: Vec<String> = title.split("_").map(|word| word.to_owned()).collect();
         book_list = book_list
             .into_iter()
             .filter(|b| {
                 let binding = b.title.to_ascii_lowercase();
                 let title_words: Vec<&str> = binding
                     .split(' ')
-                    .filter(|&word| filter.contains(&word.to_owned().to_ascii_lowercase()))
+                    .filter(|&word| word_filter.contains(&word.to_owned().to_ascii_lowercase()))
                     .collect();
-                title_words.len() == filter.len()
+                title_words.len() == word_filter.len()
             })
             .collect();
     }
-    if let Some(filter) = filter_author {
+    if let Some(author) = params.author {
+        let author = author.replace("_", " ");
         book_list = book_list
             .into_iter()
-            .filter(|b| b.author.to_ascii_lowercase() == *filter)
+            .filter(|b| b.author.to_ascii_lowercase() == *author)
             .collect();
     }
-    if let Some(filter) = filter_rating {
+    if let Some(rating) = params.rating {
         book_list = book_list
             .into_iter()
-            .filter(|b| b.book_rating == filter)
+            .filter(|b| b.book_rating == rating)
             .collect();
     }
-    if let Some(filter) = filter_genre {
+    if let Some(genres) = params.genres {
+        let genres: Vec<String> = genres.split(",").map(|word| word.to_owned()).collect();
         book_list = book_list
             .into_iter()
             .filter(|b| {
                 b.genre.is_some()
-                    && filter.contains(&b.genre.as_ref().unwrap().to_ascii_lowercase())
+                    && genres.contains(&b.genre.as_ref().unwrap().to_ascii_lowercase())
             })
             .collect();
     }
-    if let Some(filter) = filter_tags {
+    if let Some(tags) = params.tags {
+        let tags: Vec<String> = tags.split(",").map(|word| word.to_owned()).collect();
         book_list = book_list
             .into_iter()
             .filter(|b| {
@@ -155,18 +120,17 @@ pub async fn list(Query(params): Query<HashMap<String, String>>) -> Json<Vec<Boo
                     .tags
                     .iter()
                     .filter(|&tag| {
-                        tag.is_some()
-                            && filter.contains(&tag.as_ref().unwrap().to_ascii_lowercase())
+                        tag.is_some() && tags.contains(&tag.as_ref().unwrap().to_ascii_lowercase())
                     })
                     .collect();
-                matched_tags.len() == filter.len()
+                matched_tags.len() == tags.len()
             })
             .collect();
     }
-    if let Some(filter) = filter_available {
+    if let Some(available) = params.available {
         book_list = book_list
             .into_iter()
-            .filter(|b| b.available == filter)
+            .filter(|b| b.available == available)
             .collect();
     }
 

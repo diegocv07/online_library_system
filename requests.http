@@ -15,8 +15,78 @@ Content-Type: application/json
         "Teen"
     ]
 }
+###
+POST http://localhost:3000/books
+Content-Type: application/json
+
+{
+    "title": "The City of Ember",
+    "author": "Jeanne DuPrau",
+    "isbn": "978-0375822742",
+    "book_rating": 3,
+    "genre": "Dystopian",
+    "tags": [
+        "Mystery",
+        "Suspense"
+    ]
+}
+###
+POST http://localhost:3000/books
+Content-Type: application/json
+
+{
+    "title": "The People of Sparks",
+    "author": "Jeanne DuPrau",
+    "isbn": "978-0375890505",
+    "book_rating": 3,
+    "genre": "Dystopian",
+    "tags": [
+        "Mystery",
+        "Suspense"
+    ]
+}
+###
+POST http://localhost:3000/books
+Content-Type: application/json
+
+{
+    "title": "The Diamond of Darkhold",
+    "author": "Jeanne DuPrau",
+    "isbn": "978-0375892448",
+    "book_rating": 3,
+    "genre": "Dystopian",
+    "tags": [
+        "Mystery",
+        "Suspense"
+    ]
+}
+###
+POST http://localhost:3000/books/dasda
+Content-Type: application/json
+
+{
+    "new_book": {"title": "The Fellowship of the Ring",
+    "author": "J. R. R. Tolkien",
+    "isbn": "978-0007322497",
+    "book_rating": 4,
+    "genre": "Fiction",
+    "tags": [
+        "Fantasy",
+        "Magic"
+    ]},
+    "key": "ityeqrytehtcuerayr0242431o853464526u1owgq32145723vb5aehresafsd"
+}
 
 ###
 
-GET http://localhost:3000/books?tags=teen
+GET http://localhost:3000/books?genres=shonen
 
+###
+
+POST http://localhost:3000/api/login
+Content-Type: application/json
+
+{
+    "username": "diegocv07",
+    "password": "1234567890"
+}
