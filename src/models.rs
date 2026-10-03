@@ -8,8 +8,10 @@ pub struct NewBook {
     pub title: String,
     pub author: String,
     pub isbn: String,
+    pub language: String,
     pub book_rating: i32,
-    pub genre: Option<String>,
+    pub description: Option<String>,
+    pub genres: Vec<Option<String>>,
     pub tags: Vec<Option<String>>,
 }
 
@@ -21,12 +23,25 @@ pub struct ProtectedNewBook {
 
 #[derive(Deserialize)]
 pub struct UpdateBook {
-    pub author: String,
-    pub book_rating: i32,
-    pub genre: Option<String>,
-    pub tags: Vec<Option<String>>,
     pub available: bool,
     pub count: i32,
+    pub author: String,
+    pub book_rating: i32,
+    pub language: String,
+    pub description: String,
+    pub genres: Vec<Option<String>>,
+    pub tags: Vec<Option<String>>,
+}
+
+#[derive(Debug, Deserialize)]
+pub struct BookQuery {
+    pub title: Option<String>,
+    pub author: Option<String>,
+    pub rating: Option<i32>,
+    pub genres: Option<String>,
+    pub tags: Option<String>,
+    pub language: Option<String>,
+    pub available: Option<bool>,
 }
 
 use diesel::prelude::*;
@@ -39,20 +54,11 @@ pub struct Book {
     pub title: String,
     pub author: String,
     pub isbn: String,
+    pub language: String,
     pub book_rating: i32,
-    pub genre: Option<String>,
-    pub tags: Vec<Option<String>>,
     pub available: bool,
     pub count: i32,
-}
-
-#[derive(Debug, Deserialize)]
-pub struct BookQuery {
-    pub title: Option<String>,
-    pub author: Option<String>,
-    pub isbn: Option<String>,
-    pub rating: Option<i32>,
-    pub genres: Option<String>,
-    pub tags: Option<String>,
-    pub available: Option<bool>,
+    pub description: Option<String>,
+    pub genres: Vec<Option<String>>,
+    pub tags: Vec<Option<String>>,
 }

@@ -1,0 +1,6 @@
+ALTER TABLE books 
+ALTER COLUMN isbn TYPE VARCHAR,
+DROP COLUMN language,
+DROP COLUMN description,
+DROP COLUMN genres;
+ALTER TABLE books ADD COLUMN genre VARCHAR DEFAULT 'Undefined';

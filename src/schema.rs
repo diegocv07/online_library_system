@@ -5,11 +5,14 @@ diesel::table! {
         id -> Int4,
         title -> Varchar,
         author -> Varchar,
+        #[max_length = 20]
         isbn -> Varchar,
         book_rating -> Int4,
-        genre -> Nullable<Varchar>,
         available -> Bool,
         count -> Int4,
         tags -> Array<Nullable<Text>>,
+        language -> Varchar,
+        description -> Nullable<Text>,
+        genres -> Array<Nullable<Text>>,
     }
 }

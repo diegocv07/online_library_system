@@ -1,43 +1,9 @@
-// use crate::models::Book;
-// use crate::schema::books::dsl::books;
-// use crate::{db::establish_connection, schema::books::id};
-// use diesel::dsl::max;
-// use diesel::prelude::*;
-// use std::option::Option;
-use std::sync::{Arc, Mutex};
-
+// Global data that is not stored in the database, WIP!!!
 #[derive(Clone)]
-pub struct AppState {
-    pub administrator: Arc<Mutex<bool>>,
-    pub login_attempts: Arc<Mutex<i32>>,
-}
+pub struct AppState {}
 
 impl AppState {
     pub fn new() -> Self {
-        // let connection = &mut establish_connection();
-
-        // let results = books
-        //     .select(max(id))
-        //     .load::<Option<i32>>(connection)
-        //     .expect("Error loading id");
-
-        // let max_id = results[0].unwrap_or(0);
-
-        // let seed = vec![Book {
-        //     id: max_id + 1,
-        //     title: "Game Programming Patterns".to_owned(),
-        //     author: "Robert Nystrom".to_owned(),
-        //     isbn: "978-0990582908".to_owned(),
-        //     book_rating: 2,
-        //     genre: Some("Education".to_owned()),
-        //     tags: vec![],
-        //     available: false,
-        //     count: 0,
-        // }];
-
-        AppState {
-            administrator: Arc::new(Mutex::new(false)),
-            login_attempts: Arc::new(Mutex::new(0)),
-        }
+        AppState {}
     }
 }

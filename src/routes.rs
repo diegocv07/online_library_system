@@ -1,16 +1,10 @@
 use crate::api_handlers::books;
 use crate::state::AppState;
 use axum::{
-    Json, Router,
-    extract::State,
+    Router,
     http::{StatusCode, Uri},
     routing::get,
 };
-use dotenvy::dotenv;
-use serde::Deserialize;
-use std::env;
-
-const MAX_LOGINS: i32 = 5;
 
 // TODO setup up api routes
 pub fn app(state: AppState) -> Router {
@@ -33,10 +27,4 @@ async fn health() -> &'static str {
 
 async fn fallback(uri: Uri) -> (StatusCode, String) {
     (StatusCode::NOT_FOUND, format!("No route for {uri}"))
-}
-
-#[derive(Debug, Deserialize)]
-struct LoginPayload {
-    username: String,
-    password: String,
 }

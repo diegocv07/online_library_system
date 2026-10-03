@@ -5,15 +5,18 @@ POST http://localhost:3000/books
 Content-Type: application/json
 
 {
-    "title": "Cant Fear Your Own World Vol. 1",
+    "new_book": {"title": "Cant Fear Your Own World Vol. 1",
     "author": "Tite Kubo",
     "isbn": "978-1974713264",
     "book_rating": 3,
     "genre": "Shonen",
+    "language": "English",
     "tags": [
         "Manga",
         "Teen"
-    ]
+    ],
+    "genres": []},
+    "key": "ityeqrytehtcuerayr0242431o853464526u1owgq32145723vb5aehresafsd"
 }
 ###
 POST http://localhost:3000/books
@@ -79,7 +82,7 @@ Content-Type: application/json
 
 ###
 
-GET http://localhost:3000/books?genres=shonen
+GET http://localhost:3000/books?title=the
 
 ###
 
