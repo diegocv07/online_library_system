@@ -1,7 +1,8 @@
 use crate::state::AppState;
+use tower_http::cors::{Any, CorsLayer};
 
-mod api_handlers;
 mod db;
+mod handlers;
 mod models;
 mod routes;
 mod schema;
@@ -11,8 +12,8 @@ mod state;
 
 async fn main() {
     let state = AppState::new();
-
-    let app = routes::app(state);
+    let cors = CorsLayer::new().allow_origin(Any);
+    let app = routes::app(state).layer(cors);
 
     let listener = tokio::net::TcpListener::bind("0.0.0.0:3000")
         .await

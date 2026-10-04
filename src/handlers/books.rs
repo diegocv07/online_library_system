@@ -8,8 +8,8 @@ use axum::{
 use dotenvy::dotenv;
 
 use crate::{
-    api_handlers::filters::*,
     db::*,
+    handlers::filters::*,
     models::{Book, BookQuery, NewBook, ProtectedNewBook, UpdateBook},
     schema::books,
 };
@@ -86,14 +86,20 @@ pub async fn get(Path(id): Path<i32>) -> Result<Json<Book>, StatusCode> {
 }
 
 // READ
-pub async fn list(Query(params): Query<BookQuery>) -> Json<Vec<Book>> {
-    // println!("{params:?}");
+pub async fn list(
+    Query(params): Query<BookQuery>,
+) -> Result<(StatusCode, Json<Vec<Book>>), StatusCode> {
     let conn = &mut establish_connection();
 
-    let mut book_list = books::dsl::books
+    let book_list = books::dsl::books
         .select(Book::as_select())
-        .load(conn)
-        .expect("Error loading books");
+        .order_by(books::title)
+        .load(conn);
+
+    if book_list.is_err() {
+        return Err(StatusCode::INTERNAL_SERVER_ERROR);
+    }
+    let mut book_list = book_list.unwrap();
 
     book_list = filter_by_title(book_list, params.title);
     book_list = filter_by_author(book_list, params.author);
@@ -103,7 +109,7 @@ pub async fn list(Query(params): Query<BookQuery>) -> Json<Vec<Book>> {
     book_list = filter_by_genres(book_list, params.genres);
     book_list = filter_by_tags(book_list, params.tags);
 
-    Json(book_list)
+    Ok((StatusCode::OK, Json(book_list)))
 }
 
 // UPDATE

@@ -23,8 +23,10 @@ pub fn filter_by_rating(book_list: Vec<Book>, filter: Option<i32>) -> Vec<Book> 
 }
 
 pub fn filter_by_author(book_list: Vec<Book>, filter: Option<String>) -> Vec<Book> {
-    if let Some(author) = filter {
-        let author = author.to_ascii_lowercase().replace("_", " ");
+    if let Some(author) = filter
+        && author.len() > 0
+    {
+        let author = author.to_ascii_lowercase().replace("+", " ");
 
         book_list
             .into_iter()
@@ -36,8 +38,10 @@ pub fn filter_by_author(book_list: Vec<Book>, filter: Option<String>) -> Vec<Boo
 }
 
 pub fn filter_by_language(book_list: Vec<Book>, filter: Option<String>) -> Vec<Book> {
-    if let Some(language) = filter {
-        let language = language.to_ascii_lowercase().replace("_", " ");
+    if let Some(language) = filter
+        && language.len() > 0
+    {
+        let language = language.to_ascii_lowercase().replace("+", " ");
 
         book_list
             .into_iter()
@@ -49,10 +53,12 @@ pub fn filter_by_language(book_list: Vec<Book>, filter: Option<String>) -> Vec<B
 }
 
 pub fn filter_by_title(book_list: Vec<Book>, filter: Option<String>) -> Vec<Book> {
-    if let Some(title) = filter {
+    if let Some(title) = filter
+        && title.len() > 0
+    {
         let word_filter: Vec<String> = title
             .to_ascii_lowercase()
-            .split("_")
+            .split("+")
             .map(|word| word.to_owned())
             .collect();
 
@@ -73,7 +79,9 @@ pub fn filter_by_title(book_list: Vec<Book>, filter: Option<String>) -> Vec<Book
 }
 
 pub fn filter_by_tags(book_list: Vec<Book>, filter: Option<String>) -> Vec<Book> {
-    if let Some(tags) = filter {
+    if let Some(tags) = filter
+        && tags.len() > 0
+    {
         let tags: Vec<String> = tags
             .to_ascii_lowercase()
             .split(",")
@@ -99,7 +107,9 @@ pub fn filter_by_tags(book_list: Vec<Book>, filter: Option<String>) -> Vec<Book>
 }
 
 pub fn filter_by_genres(book_list: Vec<Book>, filter: Option<String>) -> Vec<Book> {
-    if let Some(genres) = filter {
+    if let Some(genres) = filter
+        && genres.len() > 0
+    {
         let genres: Vec<String> = genres
             .to_ascii_lowercase()
             .split(",")
