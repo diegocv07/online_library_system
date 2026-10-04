@@ -12,11 +12,10 @@ pub fn app(state: AppState) -> Router {
         .route("/health", get(health))
         .route("/books", get(books::list).post(books::add))
         .route(
-            "/books/isbn/{value}",
-            get(books::find_by_isbn)
-                .delete(books::delete)
-                .patch(books::update),
+            "/books/{value}",
+            get(books::get).delete(books::delete).put(books::update),
         )
+        .route("/books/isbn/{value}", get(books::find_by_isbn))
         .fallback(fallback)
         .with_state(state)
 }
