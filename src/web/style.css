@@ -2,16 +2,49 @@
     min-width: 500px;
     width: min-content;
     height: min-content;
+    margin-left: auto;
+    margin-right: auto;
     background-color: rgb(113, 48, 48);
     border-color: black;
     border-style: solid;
-    text-align: right;
+
+    th {
+        color: #000000;
+    }
+    td {
+        text-align: right;
+        color: #000000;
+    }
 
     border-width: 2px;
     padding: 10px;
-    p {
-        color:white;
-    }
+
+    color: rgb(255, 255, 255);
+}
+
+body {
+    margin: 0%;
+    background-color: rgb(77, 56, 46);
+    padding: 0%;
+}
+
+.info {
+    color: rgb(0, 0, 0);
+    width: 60%;
+    height: 100%;
+    margin-left: auto;
+    margin-right: auto;
+    background-color: rgb(200, 183, 161);
+    padding: 20px;
+}
+
+.search_input {
+    max-width: 200px;
+    margin-bottom: 5px;
+}
+
+#rating {
+    width: 100px;
 }
 
 .navigation {
@@ -20,6 +53,7 @@
 
 h1 {
     font-family: Arial, Helvetica, sans-serif;
+    text-align: center;
 }
 
 p {
@@ -39,6 +73,7 @@ th,
 td {
     padding: 5px;
     border-bottom: 1px solid #000000;
+    border-inline: 1px solid #afafaf;
     max-width: 100%;
     white-space: nowrap;
     padding-inline: 15px;

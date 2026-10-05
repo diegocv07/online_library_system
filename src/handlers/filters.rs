@@ -26,11 +26,22 @@ pub fn filter_by_author(book_list: Vec<Book>, filter: Option<String>) -> Vec<Boo
     if let Some(author) = filter
         && author.len() > 0
     {
-        let author = author.to_ascii_lowercase().replace("+", " ");
+        let word_filter: Vec<String> = author
+            .to_ascii_lowercase()
+            .split("+")
+            .map(|word| word.to_owned())
+            .collect();
 
         book_list
             .into_iter()
-            .filter(|b| b.author.to_ascii_lowercase() == *author)
+            .filter(|b| {
+                let binding = b.author.to_ascii_lowercase();
+                let author_names: usize = binding
+                    .split(' ')
+                    .filter(|&word| word_filter.contains(&word.to_owned().to_ascii_lowercase()))
+                    .count();
+                author_names >= word_filter.len()
+            })
             .collect()
     } else {
         book_list
@@ -61,7 +72,6 @@ pub fn filter_by_title(book_list: Vec<Book>, filter: Option<String>) -> Vec<Book
             .split("+")
             .map(|word| word.to_owned())
             .collect();
-
         book_list
             .into_iter()
             .filter(|b| {
@@ -70,7 +80,7 @@ pub fn filter_by_title(book_list: Vec<Book>, filter: Option<String>) -> Vec<Book
                     .split(' ')
                     .filter(|&word| word_filter.contains(&word.to_owned().to_ascii_lowercase()))
                     .count();
-                title_words == word_filter.len()
+                title_words >= word_filter.len()
             })
             .collect()
     } else {
@@ -84,6 +94,7 @@ pub fn filter_by_tags(book_list: Vec<Book>, filter: Option<String>) -> Vec<Book>
     {
         let tags: Vec<String> = tags
             .to_ascii_lowercase()
+            .replace(" ", "")
             .split(",")
             .map(|word| word.to_owned())
             .collect();
@@ -98,7 +109,7 @@ pub fn filter_by_tags(book_list: Vec<Book>, filter: Option<String>) -> Vec<Book>
                         tag.is_some() && tags.contains(&tag.as_ref().unwrap().to_ascii_lowercase())
                     })
                     .count();
-                matched_tags == tags.len()
+                matched_tags >= tags.len()
             })
             .collect()
     } else {
@@ -112,6 +123,7 @@ pub fn filter_by_genres(book_list: Vec<Book>, filter: Option<String>) -> Vec<Boo
     {
         let genres: Vec<String> = genres
             .to_ascii_lowercase()
+            .replace(" ", "")
             .split(",")
             .map(|word| word.to_owned())
             .collect();
@@ -127,7 +139,7 @@ pub fn filter_by_genres(book_list: Vec<Book>, filter: Option<String>) -> Vec<Boo
                             && genres.contains(&genre.as_ref().unwrap().to_ascii_lowercase())
                     })
                     .count();
-                matched_genres == genres.len()
+                matched_genres >= genres.len()
             })
             .collect()
     } else {

@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="style.css">
+    <script src="jquery-4.0.0.min.js"></script>
+    <script src="script.js"></script>
+    <title>Steveston Online Library</title>
+</head>
+
+<body>
+    <div class="info">
+        <h1>Steveston Online Library</h1>
+        <p>Find a book using the filters below:</p>
+        <div class="navigation">
+            <label class="search_label" for="title">Title:</label>
+            <input class="search_input" name="title" id="title" placeholder="Title">
+            <br>
+            <label class="search_label" for="author">Author:</label>
+            <input class="search_input" name="author" id="author" placeholder="Author">
+            <br>
+            <label class="search_label" for="isbn">ISBN:</label>
+            <input class="search_input" name="isbn" id="isbn" placeholder="ISBN">
+            <br>
+            <label class="search_label" for="rating">Age Rating:</label>
+            <input class="search_input" type="number" name="rating" id="rating" min="1" max="5"
+                placeholder="Age rating">
+            <br>
+            <label class="search_label" for="language">Language:</label>
+            <input class="search_input" name="language" id="language" placeholder="Language">
+            <br>
+            <label class="search_label" for="genres">Genres:</label>
+            <input class="search_input" type="text" name="genres" id="genres" placeholder="adventure, thriller, etc.">
+            <br>
+            <label class="search_label" for="tags">Tags: </label>
+            <input class="search_input" type="text" name="tags" id="tags" placeholder="manga, novel, picture, etc.">
+            <br>
+            <label class="search_label" for="available_true">Available?</label>
+            <input class="search_input" type="radio" name="available" id="available_true">
+            <label class="search_label" for="available_true">Yes</label>
+            <input class="search_input" type="radio" name="available" id="available_false">
+            <label class="search_label" for="available_false">No</label>
+            <input class="search_input" type="radio" name="available" id="available_any" checked="true">
+            <label class="search_label" for="available_any">Any</label>
+            <br>
+            <br>
+            <button class="search_input" onclick="submitForm()">Submit</button>
+
+        </div>
+        <div>
+            <a href="index.html">Back</a>
+        </div>
+        <div id="display_results">
+            <p id="results_label">No results</p>
+        </div>
+    </div>
+
+</body>
+
+</html>
